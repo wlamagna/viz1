@@ -1,25 +1,100 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello, data!</title>
+    <title>Many circles</title>
     <script type="text/javascript" src="lib/d3.v3.min.js"></script>
+	<style type='text/css'>
+	.node {
+		fill: #000;
+		font-family: sans-serif;
+		font-size: 12px;
+		color: white;
+	}
+
+	.link {
+		stroke: #999;
+		stroke-width: 2px;
+	}
+
+	.text {
+		font-family: "sans-serif";
+		font-size: 15px;
+		fill: white;
+		pointer-events: none;
+	}
+  </style>
   </head>
   <body>
-	<div id="viz"></div>
+	  <div id="myCanvas"></div>
 	<script type="text/javascript">
-    var sampleSVG = d3.select("#viz")
-        .append("svg:svg")
-        .attr("width", 100)
-        .attr("height", 100);
-    sampleSVG.append("svg:circle")
-        .style("stroke", "black")
-        .style("fill", "white")
-        .attr("r", 40)
-        .attr("cx", 50)
-        .attr("cy", 50)
+		var width = 1300;
+		var height = 1000;
+		var circ_width = 40;
+		var circles_amount = 30;
+		var min_x = 0+(circ_width+1);
+		var max_x = width-(circ_width+1);
+		var min_y = 0+(circ_width+1);
+		var max_y = height-(circ_width+1);
+		// Build the random circle x y coordinates. Each circle is a node
+		var nodes = [];
+		for (var i=0; i< circles_amount; i++) {
+			random_x = Math.floor(Math.random() * (max_x - min_x + 1)) + min_x;
+			//coords.push({"x": random_x, "y": random_y})
+			nodes.push({"name": random_x})
+		}
+		// Set the connection between nodes (links)
+		var links = [];
+		for (var i=0; i< circles_amount; i++) {
+			source_node = Math.floor(Math.random() * (circles_amount));
+			target_node = Math.floor(Math.random() * (circles_amount));
+			links.push({"source": source_node, "target": target_node})
+		}
+		var svg = d3.select("#myCanvas").append("svg")
+			.attr("width", width)
+			.attr("weight", height);
+
+		var force = d3.layout.force()
+			.size([width/2, 300])
+			.nodes(nodes)
+			.links(links)
+			.linkDistance(120)
+			.charge(-20)
+			.on("tick", tick);
+
+		var links = svg.selectAll(".link")
+		   .data(links)
+		   .enter().append("line")
+		   .attr("class", "link");
  
+		var nodes = svg.selectAll(".node")
+		   .data(nodes)
+		   .enter().append("circle")
+		   .attr("class", "node")
+		   .attr("r", 10)
+		   .call(force.drag);
+               
+		var text = svg.selectAll(".text")
+			.data(nodes)
+			.enter()
+			.append("text").attr("class", "text")
+			.text(function (d) { return d.name; });
+
+		force.start();
+
+		function tick() {
+			links.attr("x1", function (d) { return d.source.x; })
+				.attr("y1", function (d) { return d.source.y; })
+				.attr("x2", function (d) { return d.target.x; })
+				.attr("y2", function (d) { return d.target.y; });
+
+			nodes.attr("cx", function (d) { return d.x; })
+				.attr("cy", function (d) { return d.y; });
+			
+			text.attr("x", function (d) { return d.x - 15; })
+				.attr("y", function (d) { return d.y + 5; })
+				.text(function (d) { return d.name; });
+		}
     </script>
- 
   </body>
 </html>
 
