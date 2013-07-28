@@ -5,10 +5,10 @@
     <script type="text/javascript" src="lib/d3.v3.min.js"></script>
 	<style type='text/css'>
 	.node {
-		fill: #000;
 		font-family: sans-serif;
 		font-size: 12px;
-		color: white;
+		opacity:0.5;
+		fill: rgba(255, 128, 128, 0.5);
 	}
 
 	.link {
@@ -59,8 +59,9 @@
 			.size([width, height])
 			.nodes(nodes)
 			.links(links)
-			.linkDistance(80)
-			.charge(-30)
+			.linkDistance(180)
+			.linkStrength(0.1)
+			.charge(-150)
 			.on("tick", tick);
 
 		var links = svg.selectAll(".link")
@@ -72,7 +73,8 @@
 		   .data(nodes)
 		   .enter().append("circle")
 		   .attr("class", "node")
-		   .attr("r", function(d) { console.log(d.size); return(d.size); })
+		   .style("fill", "#ff0000")
+		   .attr("r", function(d) { return(d.size); })
 		   .call(force.drag);
 
 		var text = svg.selectAll(".text")
