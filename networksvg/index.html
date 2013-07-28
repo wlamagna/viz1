@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+var width = 1300;
+var height = 500;
+var circ_width = 40;
+var circles_amount = 30;
+var c=document.getElementById("myCanvas");
+var min_x = 0+(circ_width+1);
+var max_x = width-(circ_width+1);
+var min_y = 0+(circ_width+1);
+var max_y = height-(circ_width+1);
+//
+c.width = width;
+c.height = height;
+var ctx=c.getContext("2d");
+var random_x = Math.floor(Math.random() * (max_x - min_x + 1)) + min_x;
+var random_y = Math.floor(Math.random() * (max_y - min_y + 1)) + min_y;
+ctx.fillStyle="rgba(0,200,0,0.5)";
+for (var i=0; i< circles_amount; i++) {
+	ctx.beginPath();
+	ctx.lineWidth = 1;
+	c_width = Math.floor(Math.random() * (circ_width - 2 + 1)) + 2;
+	console.log(c_width);
+	ctx.arc(random_x,random_y,c_width,0,2*Math.PI);
+	ctx.moveTo(random_x, random_y);
+	random_x = Math.floor(Math.random() * (max_x - min_x + 1)) + min_x;
+	random_y = Math.floor(Math.random() * (max_y - min_y + 1)) + min_y;
+	ctx.lineTo(random_x, random_y);
+	ctx.fill();
+	ctx.stroke();
+	ctx.fillStyle="rgba(140,10,20,0.2)";
+	ctx.moveTo(random_x+c_width, random_y);
+}
+ctx.beginPath();
+ctx.fillStyle="rgba(200,0,0,0.5)";
+ctx.strokeStyle = 'black';
+ctx.arc(random_x,random_y,circ_width,0,2*Math.PI);
+ctx.fill();
+ctx.stroke();
+</script>
+</body>
+</html>
+
