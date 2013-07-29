@@ -8,9 +8,7 @@
 		font-family: sans-serif;
 		font-size: 12px;
 		opacity:0.5;
-		fill: rgba(255, 128, 128, 0.5);
 	}
-
 	.link {
 		stroke: #999;
 		stroke-width: 2px;
@@ -19,17 +17,19 @@
 	.text {
 		font-family: "sans-serif";
 		font-size: 15px;
-		fill: white;
 		pointer-events: none;
 	}
-  </style>
+	</style>
+
+
   </head>
   <body>
+	  
 	<script type="text/javascript">
 		var width = 800;
-		var height = 400;
-		var circ_width = 40;
-		var circles_amount = 30;
+		var height = 500;
+		var circ_width = 20;
+		var circles_amount = 140;
 		var min_x = 0+(circ_width+1);
 		var max_x = width-(circ_width+1);
 		var min_y = 0+(circ_width+1);
@@ -50,6 +50,7 @@
 			target_node = Math.floor(Math.random() * (circles_amount));
 			links.push({"source": source_node, "target": target_node})
 		}
+
 		var svg = d3.select("body").append("svg")
 			.attr("width", width)
 			.attr("height", height)
@@ -59,9 +60,10 @@
 			.size([width, height])
 			.nodes(nodes)
 			.links(links)
-			.linkDistance(180)
-			.linkStrength(0.1)
-			.charge(-150)
+			.linkDistance(40)
+			.linkStrength(0.4)
+			.gravity(0.1)
+			.charge(-50)
 			.on("tick", tick);
 
 		var links = svg.selectAll(".link")
@@ -76,14 +78,12 @@
 		   .style("fill", "#ff0000")
 		   .attr("r", function(d) { return(d.size); })
 		   .call(force.drag);
-
-		var text = svg.selectAll(".text")
-			.data(nodes)
-			.enter()
-			.append("text").attr("class", "text")
-			.text(function (d) { return d.name; });
-
-		force.start();
+			var text = svg.selectAll(".text")
+				.data(nodes)
+				.enter()
+				.append("text").attr("class", "text")
+				.text(function (d) { return d.name; });
+			force.start();
 
 		function tick() {
 			links.attr("x1", function (d) { return d.source.x; })
