@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="data/clnmap.css">	
+<style>
+.subunit.BUE { fill: #00ff00; }
+.subunit.CHA { fill: #cdd; }
+.subunit.CAP { fill: #ff00ee; }
+.subunit.CBA { fill: #0000ff; }
+.subunit.COR { fill: #0ee; }
+.subunit.CHA { fill: #ffff00; }
+//.subunit.CHA { display: none; }
+
+.subunit-boundary {
+  fill: none;
+  stroke: #777;
+  stroke-dasharray: 2,2;
+  stroke-linejoin: round;
+}
+
+.q0-9 { fill:rgb(254,240,217); }
+.q1-9 { fill:rgb(253,212,158); }
+.q2-9 { fill:rgb(253,187,132); }
+.q3-9 { fill:rgb(252,141,89); }
+.q4-9 { fill:rgb(227,74,51); }
+.q5-9 { fill:rgb(179,0,0); }
+
+.subunit-boundary.BUE {
+  stroke: #aaa;
+}
+</style>
+<body>
+
+<script src="d3/d3.v3.min.js"></script>
+<script src="d3/topojson.v1.min.js"></script>
+<script>
+//http://contenidos2.clarin.com/sincro/diario/mapa-e2013/?time=1376297302
+var width = 960,
+    height = 730;
+
+var projection = d3.geo.mercator()
+	.center([-59, -40 ])
+    .scale(680)
+    .translate([width / 2, height / 2]);
+    
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+d3.csv("data/impugnados-muni.csv", function(data) {
+	var rateById = d3.map();
+	for (i=0; i<data.length; i++) {
+		rateById.set(data[i].prov + "-" + data[i].muni, data[i].impug);
+	}
+	var maximo = d3.max(data, function(d, i) { return(parseInt(data[i].impug)); }); 
+	var minimo = d3.min(data, function(d, i) { return(parseInt(data[i].impug)); });
+	var quantize = d3.scale.quantize()
+		.domain([minimo, maximo])
+		.range(d3.range(5).map(function(i) { return "q" + i + "-9"; }));
+	colorear(rateById, maximo, minimo, quantize);
+});
+
+
+
+function colorear(rateById, ma, mi, quant) {
+	var valor = 0;
+	d3.json("data/argentina.json", function(error, e) {
+		svg.selectAll(".subunit")
+		.data(topojson.feature(e, e.objects.admlevel3).features)
+		.enter().append("path")
+		.attr("class", function(d) {
+			var prov_muni = d.properties.administrative_area[0].id + "-" + d.properties.administrative_area[1].id;
+			//console.log(prov_muni);
+			if (typeof(rateById.get(prov_muni)) != "undefined") {
+				//valor = ((((rateById.get(prov_muni))-mi) / (ma-mi)) * (1-0.1)+0.1);
+				//console.log(rateById.get(prov_muni));
+				console.log(prov_muni + ":" + rateById.get(prov_muni) + ":" + quant(rateById.get(prov_muni)));
+				//console.log(quant(1200));
+				return (quant(rateById.get(prov_muni)));
+			} else {
+				return ("q0-9");
+			}
+		})
+		.attr("d", path)
+	});
+}
+</script>
+
+</body>
+<html>
+</html>

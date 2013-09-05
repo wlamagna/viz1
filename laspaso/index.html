@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="data/clnmap.css">	
+<style>
+.subunit.BUE { fill: #00ff00; }
+.subunit.CHA { fill: #cdd; }
+.subunit.CAP { fill: #ff00ee; }
+.subunit.CBA { fill: #0000ff; }
+.subunit.COR { fill: #0ee; }
+.subunit.CHA { fill: #ffff00; }
+//.subunit.CHA { display: none; }
+
+.subunit-boundary {
+  fill: none;
+  stroke: #777;
+  stroke-dasharray: 2,2;
+  stroke-linejoin: round;
+}
+
+.subunit-boundary.BUE {
+  stroke: #aaa;
+}
+</style>
+<body>
+
+<script src="d3/d3.v3.min.js"></script>
+<script src="d3/topojson.v1.min.js"></script>
+<script>
+//http://contenidos2.clarin.com/sincro/diario/mapa-e2013/?time=1376297302
+var width = 960,
+    height = 730;
+
+var projection = d3.geo.mercator()
+	.center([-59, -40 ])
+    .scale(680)
+    .translate([width / 2, height / 2]);
+    
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+d3.csv("data/impugnados.csv", function(data) {
+	var rateById = d3.map();
+	for (i=0; i<data.length; i++) {
+		rateById.set(data[i].prov, data[i].impug);
+	}
+	var maximo = d3.max(data, function(d, i) { return(parseInt(data[i].impug)); }); 
+	var minimo = d3.min(data, function(d, i) { return(parseInt(data[i].impug)); }); 
+	colorear(rateById, maximo, minimo);
+});
+
+
+function colorear(rateById, ma, mi) {
+	var valor = 0;
+	d3.json("data/argentina.json", function(error, e) {
+		svg.selectAll(".subunit")
+		.data(topojson.feature(e, e.objects.admlevel2).features)
+		.enter().append("path")
+		.attr("fill", function(d) {
+			valor = ((((rateById.get(d.properties.administrative_area[0].id))-mi) / (ma-mi)) * (1-0.2)+0.2);
+			return ("rgba(255,0,0," + valor + ")");
+		})
+		.attr("d", path);
+		// admlevel2 son las provincias
+		// admlevel3 son los municipios dentro de las provincias
+	});
+}
+</script>
+
+</body>
+<html>
+</html>
