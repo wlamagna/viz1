@@ -1,15 +1,24 @@
 library("shiny");
 ui <- fluidPage(
-    selectInput("variable", "Industria:",
+	fluidRow(
+	column(3,
+		selectInput("variable", "Industria:",
                 c("Todos" = "all",
                   "Argentinos" = "argentina",
                   "Alemanes" = "alemana",
                   "Españoles" = "españa",
-                  "EEUU" = "estados unidos")),
+                  "EEUU" = "estados unidos"))
+	),
+	column(3,
+		selectInput("var2", "Tipo:",
+		c("Todos" = "all",
+                  "FIJO" = "FIJO",
+                  "PORTATIL" = "PORTATIL"))
+	)
+	),
 	plotOutput("data")
 )
-# Uso nombre $hist por que 
-# arriba dice "hist"
+
 server <- function( input, output) {
 	output$data <- renderPlot({
 		initial_date = as.Date("01/01/2013", "%d/%m/%Y");
@@ -24,12 +33,18 @@ server <- function( input, output) {
 		resumen1_datos <- c(0:diferencia_dias) * 0;
 		contador <- 0;
 		while (diferencia_dias > contador) {
-			if ( input$variable == "all") {
+			if (( input$variable == "all") & ( input$var2 == "all")) {
         			tmp_start = as.double((initial_date+contador) - sat$start);
         			tmp_end = as.double((initial_date+contador) - sat$end);
+			} else if ( input$variable == "all") {
+	 			tmp_start = as.double((initial_date+contador) - sat$start[ sat$TIPO == input$var2 ] );
+				tmp_end = as.double((initial_date+contador) - sat$end[ sat$TIPO == input$var2 ] );
+			} else if ( input$var2 == "all") {
+	 			tmp_start = as.double((initial_date+contador) - sat$start[ (sat$INDUSTRIA == input$variable) ] );
+				tmp_end = as.double((initial_date+contador) - sat$end[ (sat$INDUSTRIA == input$variable) ] );
 			} else {
-	 			tmp_start = as.double((initial_date+contador) - sat$start[ sat$INDUSTRIA == input$variable ] );
-        			tmp_end = as.double((initial_date+contador) - sat$end[ sat$INDUSTRIA == input$variable ] );
+	 			tmp_start = as.double((initial_date+contador) - sat$start[ (sat$INDUSTRIA == input$variable) & (sat$TIPO == input$var2) ] );
+				tmp_end = as.double((initial_date+contador) - sat$end[ (sat$INDUSTRIA == input$variable) & (sat$TIPO == input$var2) ] );
 			}	
         		temp <- ((tmp_start >= 0 ) & (tmp_end <= 0));
         		cuantos_sat <- length(temp[ temp == TRUE ]);
