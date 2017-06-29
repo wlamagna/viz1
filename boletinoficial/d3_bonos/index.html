@@ -57,8 +57,8 @@ Detalles del trabajo realizado</a>
 margin = {
 	top: 20,
 	right: 20,
-	bottom: 20,
-	left: 145
+	bottom: 60,
+	left: 100 
 };
 
 width = 1100 - margin.left - margin.right;
@@ -153,6 +153,21 @@ d3.csv("bonos.csv", function(error, data) {
 		.duration(500)
 		.style("opacity", 0);
 	});
+
+
+	svg.append("text")      // text label for the x axis
+        .attr("x", 465 )
+        .attr("y", 470 )
+        .style("text-anchor", "middle")
+        .text("Fecha");
+
+	svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Deuda en U$D");
 
 	function zoomed() {
 		var panX = d3.event.translate[0];
