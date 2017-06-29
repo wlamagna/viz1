@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <script type="text/javascript" src="d3.v3.min.js"></script>
+<style type="text/css">
+    body {
+    font: 10px sans-serif;
+}
+.plot {
+    fill: rgba(250, 250, 255, 0.6);
+}
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+
+.dot {
+  fill-opacity: .5;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+.axis path, .axis {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.x.axis path {
+    display: none;
+}
+
+.tooltip {
+  position: absolute;
+  width: 300px;
+  height: 28px;
+  pointer-events: none;
+}
+
+</style>
+
+<title>Monto de Bonos y Letras de la Republica Argentina en los últimos 20 años</title>
+
+<u>Monto de Bonos y Letras de la Republica Argentina en los últimos 20 años</u><br />
+Datos obtenidos del Boletin Oficial de la Republica Argentina.
+<a href="https://github.com/walt3rminer/viz1/tree/master/boletinoficial">Datos abiertos</a>,
+<a href="https://www.facebook.com/groups/datosabiertos/">Comunidad Datos Abiertos</a>,
+<a href="https://datoabierto.wordpress.com/2017/06/27/montos-en-ud-de-bonos-y-letras-emitidos-por-la-republica-argentina-boletin-oficial/">
+Detalles del trabajo realizado</a>
+
+
+<script type='text/javascript'>
+
+margin = {
+	top: 20,
+	right: 20,
+	bottom: 20,
+	left: 145
+};
+
+width = 1100 - margin.left - margin.right;
+height = 500 - margin.top - margin.bottom;
+
+// Parse the date / time
+var parseDate = d3.time.format("%d-%b-%y").parse;
+
+// Get the data
+d3.csv("bonos.csv", function(error, data) {
+	data.forEach(function(d) {
+		d.date = parseDate(d.date);
+	});
+
+	var xValue = d3.time.scale().range([0, width]);
+	xValue.domain(d3.extent(data, function (d) { return d.date; }));
+
+	var yValue = d3.scale.linear().range([height, 0]);
+	yValue.domain([0, 16800000000]);
+	var yScale = d3.scale.linear().range([height, 0]);
+
+	// Agregar el area de tooltip a la pagina
+	var tooltip = d3.select("body").append("div")
+	.attr("class", "tooltip")
+	.style("opacity", 0);
+
+	var zoom = d3.behavior.zoom()
+	.x(xValue)
+	.y(yValue)
+	.scaleExtent([1, 30])
+	.on("zoom", zoomed);
+
+	svg = d3.select('#chart')
+	.append("svg:svg")
+	.attr('width', width + margin.left + margin.right)
+	.attr('height', height + margin.top + margin.bottom)
+	.append("svg:g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	.call(zoom);
+
+	svg.append("svg:rect")
+	.attr("width", width)
+	.attr("height", height)
+	.attr("class", "plot");
+
+	var xAxis = d3.svg.axis()
+	.scale(xValue)
+	.orient("bottom")
+	.ticks(5);
+
+	svg.append("svg:g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(0, " + height + ")")
+	.call(xAxis);
+
+	var yAxis = d3.svg.axis()
+	.scale(yValue)
+	.orient("left")
+	.ticks(5);
+
+	svg.append("g")
+	.attr("class", "y axis")
+	.call(yAxis);
+
+	var clip = svg.append("svg:clipPath")
+	.attr("id", "clip")
+	.append("svg:rect")
+	.attr("x", 0)
+	.attr("y", 0)
+	.attr("width", width)
+	.attr("height", height);
+
+	// Add the scatterplot
+	svg.selectAll(".dot")
+	.data(data)
+	.enter().append("circle")
+	.classed("dot", true)
+//	.attr("transform", transform)
+	.attr("r", 5)
+	.attr("cx", function(d) { return xValue(d.date); })
+	.attr("cy", function(d) { return yValue(d.monto); })
+	.on("mouseover", function(d) {
+		tooltip.transition()
+		.duration(200)
+		.style("opacity", .9);
+		tooltip.html(d.descripcion + "<br/> (Boletin:" + d.boletin + ", U$D " + d.monto + ")")
+		.style("left", (d3.event.pageX + 5) + "px")
+		.style("top", (d3.event.pageY - 28) + "px");
+	})
+	.on("mouseout", function(d) {
+		tooltip.transition()
+		.duration(500)
+		.style("opacity", 0);
+	});
+
+	function zoomed() {
+		var panX = d3.event.translate[0];
+		var panY = d3.event.translate[1];
+		var scale = d3.event.scale;
+		panX = panX > 0 ? 0 : panX;
+		panY = Math.min(0, Math.max(panY, height - height * scale));
+
+		zoom.translate([panX, panY]);
+		svg.select(".x.axis").call(xAxis);
+		svg.select(".y.axis").call(yAxis);
+
+		svg.selectAll(".dot")
+		.attr("transform", [ "translate(" + [panX, panY] + ")", "scale(" + scale + ")" ].join(" "));
+	}
+	function transform(d) {
+		return "translate(" + xValue(d.date) + "," + yValue(d.monto) + ")";
+	}
+
+});
+
+</script>
+
+  
+</head>
+
+<body>
+<div id="chart"></div>
+</body>
+
+</html>
+
+
