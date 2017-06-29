@@ -34,11 +34,11 @@
 }
 
 .tooltip {
-  position: absolute;
-  width: 300px;
-  height: 28px;
-  pointer-events: none;
+	position: absolute;
+	pointer-events: none;
+	background: lightsteelblue;
 }
+
 
 </style>
 
@@ -136,7 +136,6 @@ d3.csv("bonos.csv", function(error, data) {
 	.data(data)
 	.enter().append("circle")
 	.classed("dot", true)
-//	.attr("transform", transform)
 	.attr("r", 5)
 	.attr("cx", function(d) { return xValue(d.date); })
 	.attr("cy", function(d) { return yValue(d.monto); })
