@@ -191,7 +191,9 @@ que aparece al ubicar el cursor del ratón sobre cada punto.
 		.html(function(d) {
 			return "<strong>Designaciones: " + d.cantidad +
 			" cargos.</strong><br />" +
-			" Fecha: " + d.date + "<br>Fuente: <a href=\"http://htmlpreview.github.io/?https://raw.githubusercontent.com/walt3rminer/viz1/master/boletinoficial/designaciones/" + format(d.date) + ".html\" target=\"_new\">fuente</a></a><br>" + "<br>";
+			" Fecha: " + d.date + 
+			"<br><a href=\"designaciones/" + format(d.date) + ".d.html\" target=\"txtde1\">dnis</a></a>&nbsp;" +
+			"<a href=\"designaciones/" + format(d.date) + ".html\" target=\"txtde2\">full</a></a>";
 		});
 		svg.call(tip);
 
@@ -236,7 +238,7 @@ que aparece al ubicar el cursor del ratón sobre cada punto.
 	}
 
 	// Read in .csv data and make graph
-	d3.tsv("data.tsv", parser,
+	d3.tsv("estimado_designaciones.tsv", parser,
 		function(error, csvdata) {
 		graficardatos(csvdata);
 	}); 
