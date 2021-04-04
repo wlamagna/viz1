@@ -8,8 +8,7 @@ En este caso utilice el "Pronostico del Tiempo a 5 dias".
 
 
 SMN comparte un archivo zip que Ud debe descargar y descomprimir.  Hoy al 4 de Abril 2021 ese
-es el procedimiento, de todas formas les escribi sugiriendo alguna alternativa para que
-los archivos puedan descargarse en un formato sin comprimir.
+es el procedimiento.
 
 Ud descarga el archivo, lo descomprime y corre el script compartido, este va a generar
 un archivo por lugar de Argentina en el que hay un pronostico.
