@@ -7,10 +7,18 @@ y justamente de alli pude obtener diversos conjuntos de datos.
 En este caso utilice el "Pronostico del Tiempo a 5 dias".
 
 
+SMN comparte un archivo zip que Ud debe descargar y descomprimir.  Hoy al 4 de Abril 2021 ese
+es el procedimiento, de todas formas les escribi sugiriendo alguna alternativa para que
+los archivos puedan descargarse en un formato sin comprimir.
+
+Ud descarga el archivo, lo descomprime y corre el script compartido, este va a generar
+un archivo por lugar de Argentina en el que hay un pronostico.
 
 
-Aqui estan los 
-[archivos](https://github.com/wlamagna/viz1/tree/master/clima), no puedo comprometerme a actualizarlos todos los dias
-pero he compartido el [script](https://github.com/wlamagna/viz1/blob/master/clima/tocsv.pl)
+Aqui estan los [archivos](https://github.com/wlamagna/viz1/tree/master/clima) procesados del pronostico
+del clima por hora para todas las provincias de Argentina.
+Lamentablemente no voy a tener tiempo para actualizar los archivos todos
+los dias, tampoco tiene sentido porque 
+he compartido el [script](https://github.com/wlamagna/viz1/blob/master/clima/tocsv.pl)
 para que pueda generar su propios archivos.
 
