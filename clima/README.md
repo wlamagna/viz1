@@ -10,9 +10,7 @@ En este caso utilice el "Pronostico del Tiempo a 5 dias".
 
 
 Aqui estan los 
-[archivos](https://github.com/wlamagna/viz1/tree/master/clima){:target="_blank"}
-, no puedo comprometerme a actualizarlos todos los dias
-pero he compartido el 
-[script](https://github.com/wlamagna/viz1/blob/master/clima/tocsv.pl)
+[archivos](https://github.com/wlamagna/viz1/tree/master/clima), no puedo comprometerme a actualizarlos todos los dias
+pero he compartido el [script](https://github.com/wlamagna/viz1/blob/master/clima/tocsv.pl)
 para que pueda generar su propios archivos.
 
