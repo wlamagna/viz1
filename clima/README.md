@@ -21,3 +21,7 @@ los dias, tampoco tiene sentido porque
 he compartido el [script](https://github.com/wlamagna/viz1/blob/master/clima/tocsv.pl)
 para que pueda generar su propios archivos.
 
+
+La idea es usar estos datos en un ObservableHQ, 
+[aqui](https://serverlinux.blogspot.com/2021/04/d3-observable-notas-post-meeting-de-d3.html)
+algunas notas al respecto.
