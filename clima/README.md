@@ -10,6 +10,9 @@ En este caso utilice el "Pronostico del Tiempo a 5 dias".
 SMN comparte un archivo zip que Ud debe descargar y descomprimir.  Hoy al 4 de Abril 2021 ese
 es el procedimiento.
 
+wget "https://ssl.smn.gob.ar/dpd/zipopendata.php?dato=pron5d" -O Pronostico5dias.zip
+unzip Pronostico5dias.zip
+
 Ud descarga el archivo, lo descomprime y corre el script compartido, este va a generar
 un archivo por lugar de Argentina en el que hay un pronostico.
 
