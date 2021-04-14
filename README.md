@@ -1,6 +1,6 @@
 
 
-Hola mundo!
+Repositorio de algunos codigos, tecnologias, tecnicas de
+visualizacion.
 
-* prueba
 
