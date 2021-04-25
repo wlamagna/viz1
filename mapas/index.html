@@ -1,54 +1,115 @@
-<! DOCTYPE html>
-<charset meta = "UTF-8">
-<!-- Definición del estilo -->
-<style>
-path {
-  stroke: white;
-  stroke-width: 0.25px;
-  fill: grey;
-}
-</style>
+<html>
+<head>
+	<title>Pronostico de viento Rio de la Plata : GeoJSON + Leaflet</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+	<link rel="stylesheet" href="leaflet.css" />
+	<link rel="stylesheet" href="leaflet.label.css" />
+	<script src="leaflet.js"></script>
+	<script src="leaflet.label.js"></script>
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		#map {
+			width: 600px;
+			height: 400px;
+		}
+	</style>
+
+	
+</head>
 <body>
-<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v0.min.js"></script>
-<!-- Creación del mapa -->
+
+
+<div id='map'></div>
+
+
 <script>
-	// tamaño del mapa
-	var width = 1000,
-		height = 600;
- 
-	// Ajustes de proyección para mercator    
-	var projection = d3.geo.mercator()
-      // centro del mapa en grados
-      .center([0, 50])
-      // zoomlevel
-      .scale(100)
-      // map-rotation
-      .rotate([0,0]);
-	  
-	// Definimos "svg" como tipo de datos
-	var svg = d3.select("body").append("svg")
-		.attr("width", width)
-		.attr("height", height);
- 
-	// definimos el "path" como as return of geographic features
-	var path = d3.geo.path()
-		.projection(projection);
-	  
-	//agrupa las capas svg
-	var g = svg.append ("g");
-	  
-	// Carga de datos y visualización del mapa en el canvas
-  
-	d3.json("world-110m.json", function(error, topology) {
-		g.selectAll("path")
-			.data(topojson.object(topology, topology.objects.countries)
-			.geometries)
-		.enter()
-			.append("path")
-			.attr("d", path)
+	var center = [-34.472,-58.489];
+	var WindIcon = L.Icon.extend({
+	options: {
+	iconSize:     [35, 35],
+        shadowSize:   [50, 64],
+        iconAnchor:   [22, 94],
+        shadowAnchor: [4, 62],
+        popupAnchor:  [-3, -76]
+	}
 	});
+	var Viento_e = new WindIcon({iconUrl: 'v-e.png'});
+	var Viento_o = new WindIcon({iconUrl: 'v-o.png'});
+
+	var map = L.map('map').setView(center, 15);
+	var osmUrl = ' http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	var osmTiles = new L.TileLayer(osmUrl, {maxZoom: 18});
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/light-v9',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(map);
+
+
+	//L.marker(center).addTo(map);
+	var pointA = L.latLng(-34.4722, -58.480);
+	var pointB = L.latLng(-34.473, -58.483);
+	var pointC = L.latLng(-34.474, -58.480);
+	var pointList = [pointA, pointB, pointC, pointA];
+	// Jugando con lineas
+	//L.polyline(pointList).addTo(map);
+
+	
+	var m = L.marker(pointA, {draggable:true})
+	.bindLabel('A sweet static label!', { noHide: true })
+	.addTo(map)
+	.showLabel();
+
+//	m = L.marker(pointB, {draggable:true}).bindLabel('A sweet static label!', { noHide: true })
+//	.addTo(map)
+//	.showLabel();
+
+
+	//L.marker(pointA, {opacity:0.4}).addTo(map);
+	//L.marker(topright, {opacity: 0.6}).addTo(map);
+	//L.marker(bottomleft, {opacity: 1}).addTo(map);
+
+	var imageBounds = [ [-34.465,-58.483] , [ -34.47, -58.477 ] ];
+	L.imageOverlay('768px-Rosa_de_los_vientos.svg.png', imageBounds).addTo(map);
+
+	var initial_point_y = -34.466;
+	var initial_point_x = -58.485;
+// Cuando lo agregue tipo imagen:
+//	var imageWind = [ [ (initial_point_y), (initial_point_x)], [ ((initial_point_y-0.001)), (initial_point_x-0.001) ]];
+//	L.imageOverlay('v-e.png', imageWind)
+//	.addTo(map);
+	// Agregado como marcador permite adjuntar un texto:
+	L.marker([initial_point_y, initial_point_x], {icon: Viento_e}).addTo(map).bindPopup("I am a green leaf.");
+
+//	var label = L.Label({ offset: [-50,-7] });
+//	label.setContent("<span class='pct'>81%</span>");
+//	map.showLabel(label);
+
+	initial_point_y = -34.468;
+	initial_point_x = -58.485;
+	var imageWind = [ [ (initial_point_y), (initial_point_x)], [ ((initial_point_y-0.001)), (initial_point_x-0.001) ]];
+	L.imageOverlay('v-o.png', imageWind)
+	.addTo(map);
+
+	initial_point_y = -34.470;
+	initial_point_x = -58.485;
+	var imageWind = [ [ (initial_point_y), (initial_point_x)], [ ((initial_point_y-0.001)), (initial_point_x-0.001) ]];
+	L.imageOverlay('v-ne.png', imageWind).addTo(map);
+
+
+
+
+	//L.imageOverlay(imageUrl, imageBounds).bringToFront();
 
 </script>
+
 </body>
 </html>
