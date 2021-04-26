@@ -94,7 +94,6 @@
 	function leerDatosDelTiempo(allText, map) {
 		var record_num = 5;  // elementos por columna
 		var allTextLines = allText.split(/\r\n|\n/);
-		//console.log(allTextLines.length);
 		var count = 1;
 		var initial_point_y = -34.469;
 		var initial_point_x = -58.49;
@@ -155,7 +154,6 @@
 			L.marker([initial_point_y, initial_point_x], {draggable: true, icon: icono })
 			.bindLabel(texto_agregar, { noHide: true,className: "estilo-label" })
 			.addTo(map);
-console.log(texto_agregar + ' ' + entries[2]);
 			texto_agregar = "";
 			//console.log(entries[2]);
 			count = count + 1;
