@@ -15,8 +15,15 @@
 			margin: 0;
 		}
 		#map {
-			width: 600px;
+			width: 700px;
 			height: 400px;
+		}
+		.estilo-label {
+			//position: absolute;
+			width:90px;
+			border: 1px;
+			height: 25px;
+			font-size:10px;
 		}
 	</style>
 
@@ -29,18 +36,20 @@
 
 
 <script>
-	var center = [-34.472,-58.489];
+	var center = [-34.472, -58.484];
 	var WindIcon = L.Icon.extend({
 	options: {
-	iconSize:     [35, 35],
-        shadowSize:   [50, 64],
-        shadowAnchor: [4, 62],
-        popupAnchor:  [-3, -76]
+	iconSize:     [20, 20],
+	labelAnchor: [3, 0]
 	}
 	});
 	var Viento_e = new WindIcon({iconUrl: 'v-e.png'});
 	var Viento_o = new WindIcon({iconUrl: 'v-o.png'});
+	var Viento_s = new WindIcon({iconUrl: 'v-s.png'});
+	var Viento_n = new WindIcon({iconUrl: 'v-n.png'});
 	var Viento_ne = new WindIcon({iconUrl: 'v-ne.png'});
+	var Viento_no = new WindIcon({iconUrl: 'v-no.png'});
+	var Viento_se = new WindIcon({iconUrl: 'v-se.png'});
 
 	var map = L.map('map').setView(center, 15);
 	var osmUrl = ' http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -63,58 +72,96 @@
 	// Jugando con lineas
 	//L.polyline(pointList).addTo(map);
 
-	var imageBounds = [ [-34.465,-58.483] , [ -34.47, -58.477 ] ];
+	var cruz_punto_x = -58.489;
+	var cruz_punto_y = -34.465;
+	var imageBounds = [ [ cruz_punto_y, cruz_punto_x ] , [ (cruz_punto_y-0.0035), (cruz_punto_x-0.004) ] ];
 	L.imageOverlay('768px-Rosa_de_los_vientos.svg.png', imageBounds).addTo(map);
 
 	var initial_point_y = -34.469;
 	var initial_point_x = -58.486;
 
 	// Algo de jquery / ajax viene tan bien:
-$(document).ready(function() {
-    $.ajax({
-        type: "GET",
-        url: "https://raw.githubusercontent.com/wlamagna/viz1/master/clima/BUENOS_AIRES.csv",
-        dataType: "text",
-        success: function(data) { leerDatosDelTiempo(data);}
-     });
-});
+	$(document).ready(function() {
+		$.ajax({
+			type: "GET",
+			url: "https://raw.githubusercontent.com/wlamagna/viz1/master/clima/BUENOS_AIRES.csv",
+			dataType: "text",
+			success: function(data) { leerDatosDelTiempo(data, map);}
+		});
+	});
 
 	// Leer el CSV y extraer la direccion pronosticada:
-function leerDatosDelTiempo(allText) {
-    var record_num = 5;  // elementos por columna
-    var allTextLines = allText.split(/\r\n|\n/);
-	console.log(allTextLines.length);
-	//console.log(allTextLines);
-    var entries = allTextLines[0].split(',');
-    var lines = [];
-    var headings = entries.splice(0,record_num);
-    while (entries.length>0) {
-        var tarr = [];
-        for (var j=0; j<record_num; j++) {
-            tarr.push(headings[j]+":"+entries.shift());
-        }
-        lines.push(tarr);
-    }
-    // alert(lines);
-}
+	function leerDatosDelTiempo(allText, map) {
+		var record_num = 5;  // elementos por columna
+		var allTextLines = allText.split(/\r\n|\n/);
+		//console.log(allTextLines.length);
+		var count = 1;
+		var initial_point_y = -34.469;
+		var initial_point_x = -58.49;
+		var texto_agregar = "";
+		var icono = Viento_ne;
+		var daynum_tmp = 0;
+		var ancho_primer_dato = 0;
+		while (count <= (allTextLines.length-2)) {
+			var entries = allTextLines[count].split(',');
+			// Agregado como marcador permite adjuntar un texto:
+			if ((entries[2] >= 30) && (entries[2] < 70)) {
+				texto_agregar = 'NE:';
+				icono = Viento_ne;	
+			}
+			if ((entries[2] >=70) && (entries[2] < 110)) {
+				texto_agregar = 'E:';
+				icono = Viento_e;	
+			}
+			if ((entries[2] >=110) && (entries[2] < 150)) {
+				texto_agregar = 'SE:';
+				icono = Viento_se;
+			}
+			if ((entries[2] >= 150 ) && (entries[2] < 215)) {
+				texto_agregar = 'S:';
+				icono = Viento_s;	
+			}
+			if ((entries[2] >= 215 ) && (entries[2] < 295)) {
+				texto_agregar = 'O:';
+				icono = Viento_o;
+			}
 
-	// Agregado como marcador permite adjuntar un texto:
-	L.marker([initial_point_y, initial_point_x], {draggable: true, icon: Viento_e})
-	.bindLabel('Lunes', { noHide: true })
-	.addTo(map);
+			if ((entries[2] >= 295 ) && (entries[2] < 340)) {
+				texto_agregar = 'NO:';
+				icono = Viento_no;
+			}
+			if ((entries[2] >= 340 ) || (entries[2] < 30)) {
+				texto_agregar = 'N:';
+				icono = Viento_n;
+			}
 
-	initial_point_y -= 0.002;
-	L.marker([initial_point_y, initial_point_x], {draggable: true, icon: Viento_o})
-	.bindLabel('Martes', { noHide: true })
-	.addTo(map);
-
-	initial_point_y -= 0.002;
-	L.marker([initial_point_y, initial_point_x], {draggable: true, icon: Viento_ne})
-	.bindLabel('Miercoles', { noHide: true })
-	.addTo(map);
-
-	//L.imageOverlay(imageUrl, imageBounds).bringToFront();
-
+			var fecha_y_hora = entries[0].split(" ");
+			var daynum = entries[0].split("/");
+			if (!(daynum_tmp == daynum[0])) {
+				daynum_tmp = daynum[0];
+				initial_point_y -= 0.0009;
+				initial_point_x = -58.495;
+				ancho_primer_dato = 0;
+				texto_agregar = texto_agregar + entries[0];
+			} else {
+				texto_agregar = texto_agregar + fecha_y_hora[1];
+				if (ancho_primer_dato == 0) {
+					initial_point_x += 0.005;
+					ancho_primer_dato = 1;
+				} else {
+					initial_point_x += 0.003;
+				}
+			}
+			L.marker([initial_point_y, initial_point_x], {draggable: true, icon: icono })
+			.bindLabel(texto_agregar, { noHide: true,className: "estilo-label" })
+			.addTo(map);
+console.log(texto_agregar + ' ' + entries[2]);
+			texto_agregar = "";
+			//console.log(entries[2]);
+			count = count + 1;
+		}
+		//console.log(allTextLines);
+	}
 </script>
 
 </body>
