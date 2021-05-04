@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body style="font-family: Arial;">
+
+<center>
+<table width="900px">
+<tr><td>
+<h1>Datos Abiertos del Banco Mundial</h1>
+
+El <a href="https://projects.bancomundial.org" target="_new">Banco Mundial</a> tiene un repositorio de 
+<a href="https://wlamagna.github.io/webpage/od/es_index.html">Datos Abiertos</a> con conjuntos
+de datos.<br />
+<br />
+
+<u>Prestamos del Banco Mundial:</u><br />
+<b>1. Obtener los datos:</b>
+<a href="https://projects.bancomundial.org/es/projects-operations/projects-list?os=0">Obtener archivo excel</a> o
+<a href="World_Bank_Projects_downloaded_5_2_2021.xls">aqui</a> un excel que obtuve hoy.
+(montos en millones de U$D)<br /><br />
+<b>2. Data Cleaning</b><br />
+<pre>
+unoconv -e FilterOptions=9/32,,9 --format csv Projects\ 1-500.Mayo.2021.xlsx
+</pre>
+Tambien <a href="xls2csv.pl">este</a> este script que hice pero no sirvio mucho en este caso.  Queda aca por si es util en un futuro.
+<br />
+<pre>
+<a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> Projects\ 1-500.Mayo.2021.csv
+</pre>
+<br />
+<b>3. Visualizando los creditos solicitados y aprobados:</b>
+<br />
+Puede acceder a la visualizacion <a href="deuda_banco_mundial.html">aca</a>.  Muestra por año el total
+en creditos , expresado en millones de dólares para proyectos.  Cliqueando cada punto accede al detalle
+de los proyectos.
+
+<br />
+<br />
+<br />
+
+<u>Terminos y condiciones de los datos:</u><br />
+<a href="https://creativecommons.org/licenses/by/4.0/">Attribution 4.0 International (CC BY 4.0).</a>.<br />
+<a href="Projects\ 1-500.csv">Excel convertido a tsv</a> del 2 de Mayo 2021 - Solo Argentina<br />
+<br />
+
+
+
+<a href="https://wlamagna.github.io/webpage/">Ir a inicio</a>
+</td></tr>
+</table>
+
+</html>
