@@ -33,13 +33,13 @@ font: 10px sans-serif;
 }
 </style>";
 		print B "<b>$fecha</b>&nbsp;<font color=\"red\">$monto</font>";
-		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_new>$proyecto</a><br />\n";
+		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_blank>$proyecto</a><br />\n";
 		close B;
 	} else {
 		$summary{$year} += $monto;
 		open B, ">>detalle/bm_$year.html";
 		print B "<b>$fecha</b>&nbsp;<font color=\"red\">$monto</font>";
-		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_new>$proyecto</a><br />\n";
+		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_blank>$proyecto</a><br />\n";
 		close B;
 	}
 }
