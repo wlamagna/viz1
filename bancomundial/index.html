@@ -10,8 +10,7 @@
 <h1>Datos Abiertos del Banco Mundial</h1>
 
 El <a href="https://projects.bancomundial.org" target="_new">Banco Mundial</a> tiene un repositorio de 
-<a href="https://wlamagna.github.io/webpage/od/es_index.html">Datos Abiertos</a> con conjuntos
-de datos.<br />
+<a href="https://wlamagna.github.io/webpage/od/es_index.html">Datos Abiertos</a> con conjuntos de datos.<br />
 <br />
 
 <u>Prestamos del Banco Mundial:</u><br />
@@ -20,9 +19,20 @@ de datos.<br />
 <a href="World_Bank_Projects_downloaded_5_2_2021.xls">aqui</a> un excel que obtuve hoy.
 (montos en millones de U$D)<br /><br />
 <b>2. Data Cleaning</b><br />
+Es necesario convertir el Excel a un archivo separado por "tabs" en este caso:
 <pre>
-unoconv -e FilterOptions=9/32,,9 --format csv Projects\ 1-500.Mayo.2021.xlsx
+unoconv -e FilterOptions=9/32,,9 --format csv <a href="World_Bank_Projects_downloaded_5_6_2021.xls">World_Bank_Projects_downloaded_5_6_2021.xls</a>
+<br />
 </pre>
+Aunque lamentablemente no es perfecto, es casi perfecto el unoconv, hice este
+otro script para terminar de corregir el formato:<br />
+<br />
+<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls > World_Bank_Projects_downloaded_5_6_2021.csv<br /><br /> 
+
+<br />
+Luego queda solamente crear el archivo que sera leido por nuestra pagina web o visualizacion:<br />
+<a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> World_Bank_Projects_downloaded_5_6_2021.csv<br />
+
 Tambien <a href="xls2csv.pl">este</a> este script que hice pero no sirvio mucho en este caso.  Queda aca por si es util en un futuro.
 <br />
 <pre>
