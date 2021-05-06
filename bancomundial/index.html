@@ -14,9 +14,10 @@ El <a href="https://projects.bancomundial.org" target=_blank>Banco Mundial</a> t
 <br />
 
 <u>Prestamos del Banco Mundial:</u><br />
-<b>1. Obtener los datos:</b>
+<b>1. Obtener los datos:</b><br />
 Desde la <a href="https://projects.bancomundial.org/es/projects-operations/projects-list?os=0">pagina</a> del Banco Mundial
 descarga el excel. Tambien tiene una copia del 2 de Mayo 2021 <a href="World_Bank_Projects_downloaded_5_2_2021.xls">aqui</a>.
+<br />
 <br />
 <b>2. Data Cleaning</b><br />
 Es necesario convertir el Excel a un archivo separado por "tabs" en este caso:
@@ -27,16 +28,16 @@ unoconv -e FilterOptions=9/32,,9 --format csv <a href="World_Bank_Projects_downl
 Aunque lamentablemente no es perfecto, es casi perfecto el unoconv, hice este
 otro script para terminar de corregir el formato:<br />
 <br />
-<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls > World_Bank_Projects_downloaded_5_6_2021.csv<br /><br /> 
+<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls > World_Bank_Projects_final_5_6_2021.csv<br /><br /> 
+<br />
+Si quisiesemos filtrariamos por pais:
+<br />
+<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls | grep Argent > World_Bank_Projects_final_5_6_2021.csv<br /><br /> 
 
 <br />
 Luego queda solamente crear el archivo que sera leido por nuestra pagina web o visualizacion:<br />
-<a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> World_Bank_Projects_downloaded_5_6_2021.csv<br />
-
-Tambien <a href="xls2csv.pl">este</a> este script que hice pero no sirvio mucho en este caso.  Queda aca por si es util en un futuro.
-<br />
 <pre>
-<a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> Projects\ 1-500.Mayo.2021.csv
+<a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> World_Bank_Projects_downloaded_5_6_2021.csv<br />
 </pre>
 <br />
 <b>3. Visualizando los creditos solicitados y aprobados:</b>
