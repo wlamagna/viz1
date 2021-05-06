@@ -8,7 +8,7 @@
 <table width="900px">
 <tr><td>
 <h1>Datos Abiertos del Banco Mundial</h1>
-
+<b> Estoy haciendo manteminento, puede que algunas csoas no esten andando!! 6 Mayo 2021</b><br/>
 El <a href="https://projects.bancomundial.org" target=_blank>Banco Mundial</a> tiene un repositorio de 
 <a href="https://wlamagna.github.io/webpage/od/es_index.html">Datos Abiertos</a> con conjuntos de datos.<br />
 <br />
@@ -23,18 +23,16 @@ descarga el excel. Tambien tiene una copia del 2 de Mayo 2021 <a href="World_Ban
 Es necesario convertir el Excel a un archivo separado por "tabs" en este caso:
 <pre>
 unoconv -e FilterOptions=9/32,,9 --format csv <a href="World_Bank_Projects_downloaded_5_6_2021.xls">World_Bank_Projects_downloaded_5_6_2021.xls</a>
-<br />
 </pre>
 Aunque lamentablemente no es perfecto, es casi perfecto el unoconv, hice este
 otro script para terminar de corregir el formato:<br />
-<br />
-<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls > World_Bank_Projects_final_5_6_2021.csv<br /><br /> 
-<br />
+<pre>
+<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls > World_Bank_Projects_final_5_6_2021.csv
+</pre>
 Si quisiesemos filtrariamos por pais:
-<br />
-<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls | grep Argent > World_Bank_Projects_final_5_6_2021.csv<br /><br /> 
-
-<br />
+<pre>
+<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls | grep Argent > World_Bank_Projects_final_5_6_2021.csv
+</pre>
 Luego queda solamente crear el archivo que sera leido por nuestra pagina web o visualizacion:<br />
 <pre>
 <a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> World_Bank_Projects_downloaded_5_6_2021.csv<br />

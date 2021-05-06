@@ -19,7 +19,8 @@ while (<A>) {
 	chomp;
 	next if (/^Project Name/);
 	next if (/^World bank/);
-	my ($proyecto, $pais, $id_proj, $monto, $status, $fecha_approval, $fecha_lastupdate) = split(/\t/);
+#	my ($proyecto, $pais, $id_proj, $monto, $status, $fecha_approval, $fecha_lastupdate) = split(/\t/);
+	my ($proyecto, $region, $pais, $id_proj, $monto, $status, $fecha_approval, $fecha_lastupdate) = split(/\t/);
 	next if ($fecha_approval == "");
 	my ($year, $month, $day) = $fecha_approval =~ /([0-9]{4})-([0-9]{2})-([0-9]{2}).*/g;
 	if (!(defined($summary{$year}))) {
