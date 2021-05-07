@@ -7,10 +7,11 @@ open A, "$ARGV[0]" or die ("no pude abrir $ARGV[0]");
 
 while (<A>) {
 	chomp;
-	my ($proj, @rest) = split("\t", $_);
+	next if /\&amp; * \( \)/;
+	my ($proj, @rest) = split('\|', $_);
 	if ($proj =~ /^P[0-9]/) {
-		print "\n$proj\t";
-		print join ("\t", @rest);
+		print "\n$proj\|";
+		print join ("\|", @rest);
 	} else {
 		print;
 	}

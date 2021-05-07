@@ -22,12 +22,12 @@ descarga el excel. Tambien tiene una copia del 2 de Mayo 2021 <a href="World_Ban
 <b>2. Data Cleaning</b><br />
 Es necesario convertir el Excel a un archivo separado por "tabs" en este caso:
 <pre>
-unoconv -e FilterOptions=9/32,,9 --format csv <a href="World_Bank_Projects_downloaded_5_6_2021.xls">World_Bank_Projects_downloaded_5_6_2021.xls</a>
+unoconv -e FilterOptions=124,,,1 --format csv <a href="World_Bank_Projects_downloaded_5_6_2021.xls">World_Bank_Projects_downloaded_5_6_2021.xls</a>
 </pre>
 Aunque lamentablemente no es perfecto, es casi perfecto el unoconv, hice este
 otro script para terminar de corregir el formato:<br />
 <pre>
-<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.xls > World_Bank_Projects_final_5_6_2021.csv
+<a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.csv > World_Bank_Projects_final_5_6_2021.csv
 </pre>
 Si quisiesemos filtrariamos por pais:
 <pre>
