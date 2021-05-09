@@ -20,12 +20,12 @@ while (<A>) {
 	next if (/^Project Name/);
 	next if (/^World bank/);
 #	my ($proyecto, $pais, $id_proj, $monto, $status, $fecha_approval, $fecha_lastupdate) = split(/\t/);
-	my ($proyecto, $region, $pais, $id_proj, $monto, $status, $fecha_approval, $fecha_lastupdate) = split(/\t/);
+	my ($id_proj, $pais, $proyecto, $fecha_approval, $monto) = split(/\t/);
 	next if ($fecha_approval == "");
 	my ($year, $month, $day) = $fecha_approval =~ /([0-9]{4})-([0-9]{2})-([0-9]{2}).*/g;
-	if (!(defined($summary{$year}))) {
-		$summary{$year} = $monto;
-		open B, ">detalle/bm_$year.html";
+	if (!(defined($summary{$year}{$pais}))) {
+		$summary{$year}{$pais} = $monto;
+		open B, ">detalle/bm_" . $pais ."_$year.html";
 		print B "<html><head>
 <meta charset=\"UTF-8\">
 <style type=\"text/css\">
@@ -37,8 +37,8 @@ font: 10px sans-serif;
 		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_blank>$proyecto</a><br />\n";
 		close B;
 	} else {
-		$summary{$year} += $monto;
-		open B, ">>detalle/bm_$year.html";
+		$summary{$year}{$pais} += $monto;
+		open B, ">>detalle/bm_" . $pais. "_$year.html";
 		print B "<b>$fecha</b>&nbsp;<font color=\"red\">$monto</font>";
 		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_blank>$proyecto</a><br />\n";
 		close B;
@@ -46,7 +46,11 @@ font: 10px sans-serif;
 }
 close A;
 
-print "cantidad\tdate\n";
+print "pais\tcantidad\tdate\n";
 foreach my $y (sort keys %summary) {
-	print "$summary{$y}\t$y" . "0101\n";
+	foreach my $p (sort keys %{$summary{$y}}) {
+		print "$p\t$summary{$y}{$p}\t$y" . "0101\n";
+	}
 }
+
+

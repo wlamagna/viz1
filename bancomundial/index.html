@@ -35,10 +35,14 @@ otro script para terminar de corregir el formato:<br />
 Si quisiesemos filtrariamos por pais:
 <pre>
 <a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.csv | grep Argent > World_Bank_Projects_final_5_6_2021.csv
+
+cat World_Bank_Projects_final_5_6_2021.csv | cut -f1,3,6,10,16 -d\| | sed 's/\t/ /g' | sed 's/|/\t/g' > deuda_banco_mundial_final.csv
 </pre>
 Luego queda solamente crear el archivo que sera leido por nuestra pagina web o visualizacion:<br />
 <pre>
 <a href="resumen_banco_mundial.pl">resumen_banco_mundial.pl</a> World_Bank_Projects_downloaded_5_6_2021.csv<br />
+
+./resumen_banco_mundial.pl deuda_banco_mundial_final.csv >deuda_banco_mundial_viz.csv
 </pre>
 <br />
 <b>3. Visualizando los creditos solicitados y aprobados:</b>

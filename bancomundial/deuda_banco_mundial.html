@@ -50,12 +50,15 @@ Eje X = Año, Eje Y : Millones de dólares solicidatos para proyectos.<br />
 Cada punto Cada punto en el gráfico es el total de millones de dolares solicitados al Banco Mundial, por la Republica Argentina.<br />
 <br />
 <br /><br />Terminos y condiciones de los datos:</b><a href="https://creativecommons.org/licenses/by/4.0/">Attribution 4.0 International (CC BY 4.0).</a>.<br />
+<br />
+<select id="selectButton" onChange="eligePais(this)"></select>
+<br />
 <script>
 var margin = {
         top: 20,
         right: 80,
         bottom: 30,
-        left: 50
+        left: 100
 },
 width = 1000 - margin.left - margin.right,
 height = 400 - margin.top - margin.bottom;
@@ -104,35 +107,73 @@ var div = d3.select("body")
 	.style("opacity", 0);                  // set the opacity to nil
 
 
-function graficardatos(data) {
+//Read the data
+d3.tsv("deuda_banco_mundial_final.csv", function(data) {
+	var items = [];
+	data.forEach(function (d) {
+		// List of groups (here I have one group per column)
+		if (!(d.Country == '') && (items.indexOf(d.Country) === -1)) {
+			items.push(d.Country);
+		}
+	});
+	select = document.getElementById('selectButton');
+	//console.log(this.items);
+	// add the options to the button
+	for(var i = 0; i < items.length; i++) {
+		//console.log(items[i]);
+		select.options[select.options.length] = new Option(items[i], i);
+	}
+})
+
+
+function eligePais(sel) {
+	//console.log(sel.options[sel.selectedIndex].text);
+	svg.selectAll('*').remove();
+	var pais_seleccionado = sel.options[sel.selectedIndex].text;
+	// Read in .csv data and make graph
+	d3.tsv("deuda_banco_mundial_viz.csv?rn="+Math.random(), parser, function(error, csvdata) {
+		graficardatos(csvdata, pais_seleccionado);
+	});
+
+
+}
+
+function graficardatos(data, pais) {
+	var filteredArray=[];
+	data.forEach(function(element) {
+		if(element.pais == pais) {
+			filteredArray.push(element)
+		}
+	});
+	data = filteredArray;
+
 	color.domain(d3.keys(data[0]).filter(function(key) {
 		return key !== "date";
 	}));
-
 	data.forEach(function(d) {
-	  d.date = parseDate(d.date);
+		d.date = parseDate(d.date);
 	});
 
 	var asignaciones = color.domain().map(function(name) {
-	  return {
-		name: name,
-		values: data.map(function(d) {
-		  return {
-			date: d.date,
-			monto: +d[name]
-		  };
-		})
-	  };
+		return {
+			name: name,
+			values: data.map(function(d) {
+				return {
+				date: d.date,
+				monto: +d[name]
+			};
+			})
+	  	};
 	});
 
 	x.domain(d3.extent(data, function(d) {
-	  return d.date;
+		return d.date;
 	}));
 
 	y.domain([
 		d3.min(asignaciones, function(c) {
 		return d3.min(c.values, function(v) {
-		  return v.monto;
+			return v.monto;
 		});
 	  }),
 	d3.max(asignaciones, function(c) {
@@ -220,7 +261,7 @@ function graficardatos(data) {
 		.duration(200)
 		.style("opacity", .9);
 		var salida = "";
-		div.html('Año:' + d.date.getFullYear() + ',Total:' + d.cantidad + ' millones de U$D<br /><object data="detalle/bm_' + d.date.getFullYear() + '.html"/>')
+		div.html('Año:' + d.date.getFullYear() + ',Total:' + d.cantidad + ' millones de U$D<br /><object data="detalle/bm_' + pais + '_' + d.date.getFullYear() + '.html"/>')
 		.style("left", (d3.event.pageX) + "px")			 
 		.style("top", (d3.event.pageY - 28) + "px");
 	})
@@ -234,11 +275,6 @@ function graficardatos(data) {
 	});
 }
 
-	// Read in .csv data and make graph
-	d3.tsv("deuda_banco_mundial_viz.csv", parser,
-		function(error, csvdata) {
-		graficardatos(csvdata);
-	}); 
 	</script>
 
 </body>
