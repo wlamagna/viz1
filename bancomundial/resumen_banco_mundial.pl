@@ -33,12 +33,14 @@ body {
 font: 10px sans-serif;
 }
 </style>";
+		while($monto =~ s/(\d+)(\d\d\d)/$1\,$2/){};
 		print B "<b>$fecha</b>&nbsp;<font color=\"red\">$monto</font>";
 		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_blank>$proyecto</a><br />\n";
 		close B;
 	} else {
 		$summary{$year}{$pais} += $monto;
 		open B, ">>detalle/bm_" . $pais. "_$year.html";
+		while($monto =~ s/(\d+)(\d\d\d)/$1\,$2/){};
 		print B "<b>$fecha</b>&nbsp;<font color=\"red\">$monto</font>";
 		print B "&nbsp;<a href=\"https://projects.bancomundial.org/es/projects-operations/project-detail/$id_proj\" target=_blank>$proyecto</a><br />\n";
 		close B;

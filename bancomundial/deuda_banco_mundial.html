@@ -261,7 +261,7 @@ function graficardatos(data, pais) {
 		.duration(200)
 		.style("opacity", .9);
 		var salida = "";
-		div.html('Año:' + d.date.getFullYear() + ',Total:' + d.cantidad + ' millones de U$D<br /><object data="detalle/bm_' + pais + '_' + d.date.getFullYear() + '.html"/>')
+		div.html('Año:' + d.date.getFullYear() + ',Total:' + d.cantidad + ' millones de U$D<br /><object data="detalle/bm_' + pais + '_' + d.date.getFullYear() + '.html?gm="' + Math.random() + '/>')
 		.style("left", (d3.event.pageX) + "px")			 
 		.style("top", (d3.event.pageY - 28) + "px");
 	})
