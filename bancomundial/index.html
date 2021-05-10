@@ -23,12 +23,13 @@ descarga el excel. Tambien tiene una copia del 2 de Mayo 2021 <a href="World_Ban
 <br />
 <br />
 <b>2. Data Cleaning</b><br />
-Es necesario convertir el Excel a un archivo separado por "tabs" en este caso:
+Es necesario convertir el Excel a un archivo separado por "pipes".  Lo podemos realizar con
+un comando de unix llamado <b>unoconv</b>:
 <pre>
 unoconv -e FilterOptions=124,,,1 --format csv <a href="World_Bank_Projects_downloaded_5_6_2021.xls">World_Bank_Projects_downloaded_5_6_2021.xls</a>
 </pre>
-Aunque lamentablemente no es perfecto, es casi perfecto el unoconv, hice este
-otro script para terminar de corregir el formato:<br />
+El resultado es un archivo de nombre <b>World_Bank_Projects_downloaded_5_6_2021.csv</b> en este caso y es necesario
+un retoque final para lo cual usare este script hecho por mi:
 <pre>
 <a href="Transform_World_Bank_Projects_downloaded.pl">Transform_World_Bank_Projects_downloaded.pl</a>&nbsp;World_Bank_Projects_downloaded_5_6_2021.csv > World_Bank_Projects_final_5_6_2021.csv
 </pre>
